@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.fangbuilt.demo_springboot_tokonyadia.common.ntt.BaseNtt;
 import com.fangbuilt.demo_springboot_tokonyadia.common.util.Gender;
+import com.fangbuilt.demo_springboot_tokonyadia.member.MemberNtt;
 import com.fangbuilt.demo_springboot_tokonyadia.transaction.TransactionNtt;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -53,7 +54,7 @@ public class CustomerNtt extends BaseNtt {
     @OneToOne
     @JoinColumn(name = "member_id", unique = true)
     @JsonBackReference("member-customer")
-    private CustomerNtt member;
+    private MemberNtt member;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("customer-transactions")

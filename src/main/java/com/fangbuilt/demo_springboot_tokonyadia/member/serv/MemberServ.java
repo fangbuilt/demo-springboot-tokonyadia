@@ -9,13 +9,13 @@ import com.fangbuilt.demo_springboot_tokonyadia.member.dto.MemberReq;
 import com.fangbuilt.demo_springboot_tokonyadia.member.dto.MemberRes;
 
 public interface MemberServ {
-  MemberRes create(MemberReq request);
+  MemberRes create(MemberReq payload);
 
   MemberRes read(UUID id);
 
   Page<MemberRes> read(String username, Boolean hasCustomerProfile, Pageable pageable);
 
-  MemberRes update(UUID id, MemberReq request);
+  MemberRes update(UUID id, MemberReq payload);
 
   void delete(UUID id); // Soft delete
 }

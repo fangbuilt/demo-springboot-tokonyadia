@@ -11,8 +11,8 @@ import lombok.Builder;
  */
 @Builder
 public record MemberRes(
-    UUID id,
-    String username,
-    LocalDateTime createdAt,
-    LocalDateTime updatedAt) {
+        UUID id,
+        String username,
+        LocalDateTime createdAt,
+        LocalDateTime updatedAt) {
 }

@@ -38,17 +38,17 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberCtrl {
 
-  private final MemberServ serv;
+  private final MemberServ memberServ;
 
   @PostMapping
-  public ResponseEntity<MemberRes> create(@Valid @RequestBody MemberReq req) {
-    MemberRes response = serv.create(req);
+  public ResponseEntity<MemberRes> create(@Valid @RequestBody MemberReq payload) {
+    MemberRes response = memberServ.create(payload);
     return ResponseEntity.status(HttpStatus.CREATED).body(response);
   }
 
   @GetMapping("/{id}")
   public ResponseEntity<MemberRes> read(@PathVariable UUID id) {
-    return ResponseEntity.ok(serv.read(id));
+    return ResponseEntity.ok(memberServ.read(id));
   }
 
   /**
@@ -67,19 +67,19 @@ public class MemberCtrl {
       @RequestParam(required = false) String username,
       @RequestParam(required = false) Boolean hasCustomerProfile,
       Pageable pageable) {
-    return ResponseEntity.ok(serv.read(username, hasCustomerProfile, pageable));
+    return ResponseEntity.ok(memberServ.read(username, hasCustomerProfile, pageable));
   }
 
   @PutMapping("/{id}")
   public ResponseEntity<MemberRes> update(
       @PathVariable UUID id,
-      @Valid @RequestBody MemberReq request) {
-    return ResponseEntity.ok(serv.update(id, request));
+      @Valid @RequestBody MemberReq payload) {
+    return ResponseEntity.ok(memberServ.update(id, payload));
   }
 
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable UUID id) {
-    serv.delete(id);
+    memberServ.delete(id);
     return ResponseEntity.noContent().build();
   }
 }

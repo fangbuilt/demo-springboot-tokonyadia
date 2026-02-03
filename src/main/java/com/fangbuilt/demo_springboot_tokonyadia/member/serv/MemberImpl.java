@@ -26,30 +26,30 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class MemberImpl implements MemberServ {
 
-  private final MemberRepo repo;
+  private final MemberRepo memberRepo;
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public MemberRes create(MemberReq request) {
+  public MemberRes create(MemberReq payload) {
     // Validasi username unique
-    if (repo.existsByUsername(request.username())) {
+    if (memberRepo.existsByUsername(payload.username())) {
       throw new ResponseStatusException(
           HttpStatus.CONFLICT,
-          "Username '" + request.username() + "' sudah dipakai");
+          "Username '" + payload.username() + "' sudah dipakai");
     }
 
     MemberNtt member = MemberNtt.builder()
-        .username(request.username())
-        .password(request.password()) // TODO: Hash dengan BCrypt di production
+        .username(payload.username())
+        .password(payload.password()) // TODO: Hash dengan BCrypt di production
         .build();
 
-    return toResponse(repo.save(member));
+    return toResponse(memberRepo.save(member));
   }
 
   @Override
   @Transactional(readOnly = true)
   public MemberRes read(UUID id) {
-    MemberNtt member = repo.findById(id)
+    MemberNtt member = memberRepo.findById(id)
         .orElseThrow(() -> new ResponseStatusException(
             HttpStatus.NOT_FOUND,
             "Member dengan ID " + id + " tidak ditemukan"));
@@ -79,13 +79,13 @@ public class MemberImpl implements MemberServ {
       }
     }
 
-    return repo.findAll(spec, pageable).map(this::toResponse);
+    return memberRepo.findAll(spec, pageable).map(this::toResponse);
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
-  public MemberRes update(UUID id, MemberReq request) {
-    MemberNtt member = repo.findById(id)
+  public MemberRes update(UUID id, MemberReq payload) {
+    MemberNtt member = memberRepo.findById(id)
         .orElseThrow(() -> new ResponseStatusException(
             HttpStatus.NOT_FOUND,
             "Member dengan ID " + id + " tidak ditemukan"));
@@ -97,24 +97,24 @@ public class MemberImpl implements MemberServ {
     }
 
     // Validasi username unique (kalau berubah)
-    if (!member.getUsername().equals(request.username())) {
-      if (repo.existsByUsername(request.username())) {
+    if (!member.getUsername().equals(payload.username())) {
+      if (memberRepo.existsByUsername(payload.username())) {
         throw new ResponseStatusException(
             HttpStatus.CONFLICT,
-            "Username '" + request.username() + "' sudah dipakai");
+            "Username '" + payload.username() + "' sudah dipakai");
       }
     }
 
-    member.setUsername(request.username());
-    member.setPassword(request.password());
+    member.setUsername(payload.username());
+    member.setPassword(payload.password());
 
-    return toResponse(repo.save(member));
+    return toResponse(memberRepo.save(member));
   }
 
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void delete(UUID id) {
-    MemberNtt member = repo.findById(id)
+    MemberNtt member = memberRepo.findById(id)
         .orElseThrow(() -> new ResponseStatusException(
             HttpStatus.NOT_FOUND,
             "Member dengan ID " + id + " tidak ditemukan"));
@@ -126,7 +126,7 @@ public class MemberImpl implements MemberServ {
     }
 
     member.setDeletedAt(LocalDateTime.now());
-    repo.save(member);
+    memberRepo.save(member);
   }
 
   private MemberRes toResponse(MemberNtt member) {
