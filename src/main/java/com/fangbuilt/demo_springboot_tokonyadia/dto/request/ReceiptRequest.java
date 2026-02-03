@@ -1,0 +1,11 @@
+package com.fangbuilt.demo_springboot_tokonyadia.dto.request;
+
+import java.util.UUID;
+
+public record ReceiptRequest(
+    Double cogs,
+    Integer quantity,
+    UUID productId,
+    UUID transactionId) {
+
+}
