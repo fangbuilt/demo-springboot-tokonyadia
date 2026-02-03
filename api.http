@@ -1,1 +1,11 @@
-GET http://localhost:8080/customers
+@user = user
+@passwd =1ef204a5-2211-4f87-a15d-768a4e882243
+
+POST http://localhost:8080/members HTTP/1.1
+Authorization: Basic user passwd
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "password": "password123"
+}
