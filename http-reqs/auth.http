@@ -3,6 +3,9 @@ POST {{BASE_URL}}/auth/login
 Content-Type: application/json
 
 {
-  "username": "johndoe",
-  "password": "john123"
+  "username": "newauthuser",
+  "password": "admin123"
 }
+
+###
+POST {{BASE_URL}}/auth/logout

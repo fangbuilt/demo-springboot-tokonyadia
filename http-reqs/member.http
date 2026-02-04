@@ -4,6 +4,8 @@
 @SOFT_DELETE_TEST_MEMBER_ID = 51c4db1f-8925-4640-a2d2-7c3c6fd10e98
 # That member with that ID was soft deleted
 
+@TOKEN = eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInN1YiI6Im5ld2F1dGh1c2VyIiwiaWF0IjoxNzcwMjMyNzQwLCJleHAiOjE3NzAzMTkxNDB9.Fll-m8hLiA3XlAmni-Fp0eiomV4sNUZfAeofvwgduF8
+
 POST {{BASE_URL}}/members HTTP/1.1
 Content-Type: application/json
 
@@ -59,6 +61,7 @@ Content-Type: application/json
 
 ### Get a Member by ID
 GET {{BASE_URL}}/members/{{MEMBER_ID}}
+Authorization: Bearer {{TOKEN}}
 
 ### List Members
 GET {{BASE_URL}}/members?page=1&size=10&sort=createdAt,asc
