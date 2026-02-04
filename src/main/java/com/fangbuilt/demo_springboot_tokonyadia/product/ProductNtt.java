@@ -17,15 +17,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Product = barang yang dijual.
- * COGM = Cost of Goods Manufactured (harga pokok produk).
- *
- * PENTING: Harga ini bisa berubah sewaktu-waktu, tapi harga di Receipt
- * TIDAK boleh berubah (snapshot price saat pembelian).
- *
- * Soft delete: Iya (biar produk discontinued tetep bisa dilacak di history).
- */
+// TODO: COGM = Harga pokok produksi sebelum ambil untung, COGS = Sesudahnya
+// Selling price yg dikalikan quantity dan di sum misalnya ada diskon
+// Ketiganya wajib jadi snapshot di receipt untuk audit trail
 @Entity
 @Table(name = "m_products")
 @Getter
@@ -39,10 +33,10 @@ public class ProductNtt extends BaseNtt {
   private String name;
 
   @Column(nullable = false)
-  private Double cogm; // Harga pokok produk (bisa berubah)
+  private Double cogm;
 
   @Column(nullable = false)
-  private Integer stock; // Stok yang tersedia
+  private Integer stock;
 
   @OneToMany(mappedBy = "product", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference("product-receipts")

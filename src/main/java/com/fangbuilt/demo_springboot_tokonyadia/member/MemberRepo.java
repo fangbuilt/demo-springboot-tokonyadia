@@ -7,16 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 
-/**
- * Repository untuk Member dengan authentication support.
- */
 @Repository
 public interface MemberRepo extends JpaRepository<MemberNtt, UUID>, JpaSpecificationExecutor<MemberNtt> {
 
-    /**
-     * Cari member berdasarkan username
-     * Dipakai pas login dan validasi JWT
-     */
+    // Dipakai pas login dan validasi JWT
     Optional<MemberNtt> findByUsername(String username);
 
     /**

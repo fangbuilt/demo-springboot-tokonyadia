@@ -20,13 +20,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Transaction = transaksi pembelian.
- * Timestamp pakai createdAt dari BaseEntity (otomatis ter-set).
- *
- * One Transaction has many Receipts (detail barang yang dibeli).
- * Soft delete: Tidak (transaksi harus permanent buat accounting).
- */
 @Entity
 @Table(name = "t_transactions")
 @Getter
@@ -44,6 +37,4 @@ public class TransactionNtt extends BaseNtt {
   @OneToMany(mappedBy = "transaction", cascade = CascadeType.ALL, orphanRemoval = true)
   @JsonManagedReference("transaction-receipts")
   private List<ReceiptNtt> receipts;
-
-  // Timestamp udah ada dari BaseEntity.createdAt - gak perlu field lagi!
 }

@@ -23,11 +23,6 @@ import org.springframework.web.server.ResponseStatusException;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-/**
- * CustomerService dengan soft delete dan comprehensive filtering.
- * Customer bisa punya Member account (registered user) atau gak punya (guest
- * checkout).
- */
 @Service
 @RequiredArgsConstructor
 public class CustomerImpl implements CustomerServ {
@@ -80,9 +75,7 @@ public class CustomerImpl implements CustomerServ {
       String email,
       String address,
       Gender gender,
-      Boolean hasMember,
       Pageable pageable) {
-    // Build dynamic specification dengan semua filter yang tersedia
     Specification<CustomerNtt> spec = CustomerSpec.excludeDeleted();
 
     if (fullname != null && !fullname.isBlank()) {
@@ -96,13 +89,6 @@ public class CustomerImpl implements CustomerServ {
     }
     if (gender != null) {
       spec = spec.and(CustomerSpec.hasGender(gender));
-    }
-    if (hasMember != null) {
-      if (hasMember) {
-        spec = spec.and(CustomerSpec.hasMemberAccount());
-      } else {
-        spec = spec.and(CustomerSpec.isGuest());
-      }
     }
 
     return customerRepo.findAll(spec, pageable).map(this::toResponse);

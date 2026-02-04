@@ -8,10 +8,6 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-/**
- * Request DTO untuk create/update Customer.
- * Member ID optional karena customer bisa checkout sebagai guest (no account).
- */
 public record CustomerReq(
     @NotBlank(message = "Fullname tidak boleh kosong")
     @Size(max = 200, message = "Fullname maksimal 200 karakter")
@@ -27,5 +23,5 @@ public record CustomerReq(
 
     Gender gender,
 
-    UUID memberId // Optional - bisa null untuk guest checkout
+    UUID memberId
 ) {}

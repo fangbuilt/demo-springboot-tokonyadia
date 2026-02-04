@@ -17,19 +17,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Member = Authentication entity (login account)
- *
- * Ini entity utama buat auth. Contains:
- * - username & password (credentials)
- * - role (USER atau ADMIN)
- * - active status (buat disable account tanpa delete)
- *
- * One Member can have One Customer profile (business data).
- * Member bisa exist tanpa Customer (user baru register, belum isi profile).
- *
- * Soft delete: Iya (via BaseNtt.deletedAt)
- */
 @Entity
 @Table(name = "m_members")
 @Getter
@@ -58,11 +45,6 @@ public class MemberNtt extends BaseNtt {
     @JsonManagedReference("member-customer")
     private CustomerNtt customer;
 
-    /**
-     * Enum untuk Member Roles
-     * USER = Role biasa, bisa CRUD data mereka sendiri
-     * ADMIN = Role admin, bisa CRUD semua data + user management
-     */
     public enum MemberRole {
         USER, ADMIN
     }

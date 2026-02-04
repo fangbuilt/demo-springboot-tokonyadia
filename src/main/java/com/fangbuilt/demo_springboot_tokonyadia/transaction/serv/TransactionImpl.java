@@ -65,31 +65,25 @@ public class TransactionImpl implements TransactionServ {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public TransactionRes create(TransactionReq payload) {
-    // Step 1: Validasi customer exists
     CustomerNtt customer = customerRepo.findById(payload.customerId())
         .orElseThrow(() -> new ResponseStatusException(
             HttpStatus.NOT_FOUND,
             "Customer dengan ID " + payload.customerId() + " tidak ditemukan"));
 
-    // Step 2: Buat transaction entity (timestamp auto-set dari createdAt)
     TransactionNtt transaction = TransactionNtt.builder()
         .customer(customer)
-        .receipts(new ArrayList<>()) // Initialize list buat receipts
+        .receipts(new ArrayList<>())
         .build();
 
-    // Step 3: Process setiap item dalam shopping cart
     List<ReceiptNtt> receipts = new ArrayList<>();
 
     for (ReceiptItemReq item : payload.items()) {
-      // 3a. Validasi produk exists
       ProductNtt product = productRepo.findById(item.productId())
           .orElseThrow(() -> new ResponseStatusException(
               HttpStatus.NOT_FOUND,
               "Produk dengan ID " + item.productId() + " tidak ditemukan"));
 
-      // 3b. VALIDASI STOK - Super penting!
       if (product.getStock() < item.quantity()) {
-        // Throw exception → transaction akan di-ROLLBACK otomatis
         throw new ResponseStatusException(
             HttpStatus.BAD_REQUEST,
             String.format(
@@ -99,18 +93,13 @@ public class TransactionImpl implements TransactionServ {
                 item.quantity()));
       }
 
-      // 3c. SNAPSHOT PRICE - Capture harga saat ini ke COGS
-      // Ini yang bikin harga di receipt TIDAK berubah kalau product.cogm berubah
-      // nanti
       Double snapshotPrice = product.getCogm();
 
-      // 3d. Kurangi stok produk
       product.setStock(product.getStock() - item.quantity());
       productRepo.save(product); // Update stok
 
-      // 3e. Buat receipt dengan snapshot price
       ReceiptNtt receipt = ReceiptNtt.builder()
-          .cogs(snapshotPrice) // INI YANG PENTING - harga snapshot!
+          .cogs(snapshotPrice) // Price snapshot
           .quantity(item.quantity())
           .product(product)
           .transaction(transaction)
@@ -119,13 +108,11 @@ public class TransactionImpl implements TransactionServ {
       receipts.add(receipt);
     }
 
-    // Step 4: Attach receipts ke transaction
     transaction.setReceipts(receipts);
 
-    // Step 5: Save transaction (cascade save receipts juga)
+    // Save transaction, cascade save receipts
     TransactionNtt savedTransaction = transactionRepo.save(transaction);
 
-    // Step 6: Convert ke response DTO
     return toResponse(savedTransaction);
   }
 
@@ -147,7 +134,6 @@ public class TransactionImpl implements TransactionServ {
       LocalDateTime startDate,
       LocalDateTime endDate,
       Pageable pageable) {
-    // Build dynamic specification berdasarkan filter yang ada
     Specification<TransactionNtt> spec = (root, query, cb) -> cb.conjunction();
 
     if (customerId != null) {
@@ -183,18 +169,10 @@ public class TransactionImpl implements TransactionServ {
           "Transaction dengan ID " + id + " tidak ditemukan");
     }
 
-    // TODO: Di production, consider restore stock kalau delete transaction
-    // Tapi ini tricky karena product price mungkin udah berubah
-
     transactionRepo.deleteById(id);
   }
 
-  /**
-   * Helper method buat convert Transaction entity → TransactionResponse DTO.
-   * Include semua info yang frontend butuh dalam 1 response.
-   */
   private TransactionRes toResponse(TransactionNtt transaction) {
-    // Convert receipts ke ReceiptItemResponse
     List<ReceiptItemRes> items = transaction.getReceipts().stream()
         .map(receipt -> ReceiptItemRes.builder()
             .id(receipt.getId())
@@ -206,14 +184,13 @@ public class TransactionImpl implements TransactionServ {
             .build())
         .toList();
 
-    // Calculate total amount dari semua items
     Double totalAmount = items.stream()
         .mapToDouble(ReceiptItemRes::subtotal)
         .sum();
 
     return TransactionRes.builder()
         .id(transaction.getId())
-        .timestamp(transaction.getCreatedAt()) // Timestamp = createdAt
+        .timestamp(transaction.getCreatedAt())
         .customerId(transaction.getCustomer().getId())
         .customerName(transaction.getCustomer().getFullname())
         .items(items)

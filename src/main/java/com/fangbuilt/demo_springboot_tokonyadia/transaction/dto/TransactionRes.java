@@ -8,18 +8,14 @@ import com.fangbuilt.demo_springboot_tokonyadia.receipt.dto.ReceiptItemRes;
 
 import lombok.Builder;
 
-/**
- * Response DTO untuk Transaction.
- * Include detail receipts biar frontend langsung dapet semua info.
- */
 @Builder
 public record TransactionRes(
     UUID id,
     LocalDateTime timestamp, // Dari createdAt
     UUID customerId,
-    String customerName, // Biar frontend gak perlu fetch lagi
+    String customerName, // Biar frontend gak perlu fetch lagi (dan snapshot)
     List<ReceiptItemRes> items,
-    Double totalAmount, // Total harga keseluruhan
+    Double totalAmount, // Sum
     LocalDateTime createdAt,
     LocalDateTime updatedAt) {
 }

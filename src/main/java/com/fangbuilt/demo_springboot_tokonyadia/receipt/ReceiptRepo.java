@@ -5,12 +5,6 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-
-/**
- * Repository untuk Receipt.
- * Gak perlu JpaSpecificationExecutor karena receipt biasanya diakses via Transaction.
- * Kalau mau cari receipt, lebih make sense filter via TransactionSpecification.
- */
 @Repository
 public interface ReceiptRepo extends JpaRepository<ReceiptNtt, UUID> {
 

@@ -23,16 +23,6 @@ import com.fangbuilt.demo_springboot_tokonyadia.member.serv.MemberServ;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-/**
- * Controller untuk Member endpoints.
- *
- * Endpoints:
- * POST /members - Create member
- * GET /members/{id} - Get single member
- * GET /members - Get paginated members with filters
- * PUT /members/{id} - Update member
- * DELETE /members/{id} - Soft delete member
- */
 @RestController
 @RequestMapping("/members")
 @RequiredArgsConstructor
@@ -51,17 +41,6 @@ public class MemberCtrl {
     return ResponseEntity.ok(memberServ.read(id));
   }
 
-  /**
-   * Get members dengan pagination dan filtering.
-   *
-   * Query params:
-   * - username: Filter by username (partial match)
-   * - hasCustomerProfile: Filter by customer profile status (true/false)
-   * - page, size, sort: Pagination params (dari Pageable)
-   *
-   * Example: GET
-   * /members?username=john&hasCustomerProfile=true&page=0&size=10&sort=username,asc
-   */
   @GetMapping
   public ResponseEntity<Page<MemberRes>> read(
       @RequestParam(required = false) String username,

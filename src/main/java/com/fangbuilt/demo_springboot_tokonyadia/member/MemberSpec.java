@@ -7,15 +7,7 @@ import com.fangbuilt.demo_springboot_tokonyadia.customer.CustomerNtt;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.JoinType;
 
-/**
- * Specification buat filtering Member.
- * Useful buat admin dashboard atau user management.
- */
 public class MemberSpec {
-
-  /**
-   * Filter by username (case-insensitive, partial match).
-   */
   public static Specification<MemberNtt> hasUsernameLike(String username) {
     return (root, query, cb) -> {
       if (username == null || username.isBlank()) {
@@ -27,10 +19,6 @@ public class MemberSpec {
     };
   }
 
-  /**
-   * Filter members yang punya customer profile.
-   * Berguna buat distinguish antara "account only" vs "full profile"
-   */
   public static Specification<MemberNtt> hasCustomerProfile() {
     return (root, query, cb) -> {
       Join<MemberNtt, CustomerNtt> customerJoin = root.join("customer", JoinType.INNER);
@@ -40,10 +28,6 @@ public class MemberSpec {
     };
   }
 
-  /**
-   * Filter members yang belum punya customer profile.
-   * Berguna buat "incomplete registration" tracking.
-   */
   public static Specification<MemberNtt> hasNoCustomerProfile() {
     return (root, query, cb) -> {
       Join<MemberNtt, CustomerNtt> customerJoin = root.join("customer", JoinType.LEFT);
@@ -53,9 +37,6 @@ public class MemberSpec {
     };
   }
 
-  /**
-   * Exclude soft-deleted members.
-   */
   public static Specification<MemberNtt> excludeDeleted() {
     return (root, query, cb) -> cb.isNull(root.get("deletedAt"));
   }

@@ -5,9 +5,6 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-/**
- * Request DTO untuk create/update Product.
- */
 public record ProductReq(
     @NotBlank(message = "Nama produk tidak boleh kosong")
     @Size(max = 200, message = "Nama produk maksimal 200 karakter")

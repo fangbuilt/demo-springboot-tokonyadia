@@ -14,8 +14,7 @@ public interface CustomerServ {
 
   CustomerRes read(UUID id);
 
-  Page<CustomerRes> read(String fullname, String email, String address, Gender gender, Boolean hasMember,
-      Pageable pageable);
+  Page<CustomerRes> read(String fullname, String email, String address, Gender gender, Pageable pageable);
 
   CustomerRes update(UUID id, CustomerReq payload);
 

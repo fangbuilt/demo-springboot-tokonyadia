@@ -24,11 +24,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-/**
- * Customer = profil pembeli yang bisa punya Member account (atau guest).
- * One Customer has many Transactions.
- * Soft delete: Iya (biar history transaksi tetep lengkap).
- */
 @Entity
 @Table(name = "m_customers")
 @Getter

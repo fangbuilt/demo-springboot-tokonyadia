@@ -44,10 +44,6 @@ public abstract class BaseNtt {
   @Column(nullable = false)
   private LocalDateTime updatedAt;
 
-  /**
-   * Soft delete field - kalau ini gak null, berarti data udah "dihapus"
-   * Tapi masih ada di database buat audit trail atau recover nanti
-   */
   @Column
   private LocalDateTime deletedAt;
 }

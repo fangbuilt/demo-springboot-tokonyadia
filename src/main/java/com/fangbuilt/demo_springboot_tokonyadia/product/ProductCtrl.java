@@ -23,9 +23,6 @@ import com.fangbuilt.demo_springboot_tokonyadia.product.serv.ProductServ;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-/**
- * Controller untuk Product endpoints dengan powerful filtering.
- */
 @RestController
 @RequestMapping("/products")
 @RequiredArgsConstructor
@@ -47,23 +44,6 @@ public class ProductCtrl {
     return ResponseEntity.ok(productServ.read(id));
   }
 
-  /**
-   * Get products dengan pagination dan filtering yang lengkap.
-   *
-   * Query params:
-   * - name: Filter by product name (partial match)
-   * - minPrice, maxPrice: Filter by price range
-   * - minStock, maxStock: Filter by stock range
-   * - available: Filter produk yang ready stock (stok > 0)
-   * - page, size, sort: Pagination params
-   *
-   * Examples:
-   * 1. Search laptop: GET /products?name=laptop&page=0&size=10
-   * 2. Price range 1-5 juta: GET /products?minPrice=1000000&maxPrice=5000000
-   * 3. Ready stock only: GET /products?available=true
-   * 4. Combine: GET
-   * /products?name=laptop&minPrice=1000000&available=true&sort=cogm,asc
-   */
   @GetMapping
   public ResponseEntity<Page<ProductRes>> read(
       @RequestParam(required = false)

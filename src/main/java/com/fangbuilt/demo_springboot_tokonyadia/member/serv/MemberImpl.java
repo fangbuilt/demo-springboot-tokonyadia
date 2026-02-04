@@ -19,9 +19,6 @@ import com.fangbuilt.demo_springboot_tokonyadia.member.dto.MemberRes;
 
 import lombok.RequiredArgsConstructor;
 
-/**
- * MemberService dengan username uniqueness validation dan soft delete.
- */
 @Service
 @RequiredArgsConstructor
 public class MemberImpl implements MemberServ {
@@ -31,7 +28,6 @@ public class MemberImpl implements MemberServ {
   @Override
   @Transactional(rollbackFor = Exception.class)
   public MemberRes create(MemberReq payload) {
-    // Validasi username unique
     if (memberRepo.existsByUsername(payload.username())) {
       throw new ResponseStatusException(
           HttpStatus.CONFLICT,
@@ -40,7 +36,7 @@ public class MemberImpl implements MemberServ {
 
     MemberNtt member = MemberNtt.builder()
         .username(payload.username())
-        .password(payload.password()) // TODO: Hash dengan BCrypt di production
+        .password(payload.password()) // BCrypt implemented on Auth
         .build();
 
     return toResponse(memberRepo.save(member));
@@ -96,7 +92,6 @@ public class MemberImpl implements MemberServ {
           "Tidak bisa update member yang sudah dihapus");
     }
 
-    // Validasi username unique (kalau berubah)
     if (!member.getUsername().equals(payload.username())) {
       if (memberRepo.existsByUsername(payload.username())) {
         throw new ResponseStatusException(

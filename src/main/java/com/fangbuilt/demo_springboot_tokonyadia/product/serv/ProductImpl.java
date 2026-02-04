@@ -19,14 +19,6 @@ import com.fangbuilt.demo_springboot_tokonyadia.product.dto.ProductRes;
 
 import lombok.RequiredArgsConstructor;
 
-/**
- * ProductService dengan soft delete support dan comprehensive filtering.
- *
- * Soft Delete Pattern:
- * - Create/Update: Normal operation
- * - Delete: Set deletedAt = now(), data masih ada di DB
- * - Read: Secara default exclude deleted items (filter deletedAt = null)
- */
 @Service
 @RequiredArgsConstructor
 public class ProductImpl implements ProductServ {
@@ -53,7 +45,6 @@ public class ProductImpl implements ProductServ {
             HttpStatus.NOT_FOUND,
             "Produk dengan ID " + id + " tidak ditemukan"));
 
-    // Kalau product di-soft delete, throw 404
     if (product.getDeletedAt() != null) {
       throw new ResponseStatusException(
           HttpStatus.NOT_FOUND,
@@ -63,16 +54,6 @@ public class ProductImpl implements ProductServ {
     return toResponse(product);
   }
 
-  /**
-   * Read dengan filtering yang powerful.
-   *
-   * Example queries yang bisa dilakukan:
-   * 1. Search by name: ?name=laptop
-   * 2. Price range: ?minPrice=1000000&maxPrice=5000000
-   * 3. Stock range: ?minStock=10&maxStock=100
-   * 4. Available only: ?available=true
-   * 5. Combine semua: ?name=laptop&minPrice=1000000&available=true
-   */
   @Override
   @Transactional(readOnly = true)
   public Page<ProductRes> read(
@@ -83,10 +64,8 @@ public class ProductImpl implements ProductServ {
       Integer maxStock,
       Boolean available,
       Pageable pageable) {
-    // Start dengan spec yang exclude deleted items (default behavior)
     Specification<ProductNtt> spec = ProductSpec.excludeDeleted();
 
-    // Build dynamic query berdasarkan filter yang ada
     if (name != null && !name.isBlank()) {
       spec = spec.and(ProductSpec.hasNameLike(name));
     }
@@ -115,30 +94,20 @@ public class ProductImpl implements ProductServ {
             HttpStatus.NOT_FOUND,
             "Produk dengan ID " + id + " tidak ditemukan"));
 
-    // Kalau product di-soft delete, gak bisa di-update
     if (product.getDeletedAt() != null) {
       throw new ResponseStatusException(
           HttpStatus.BAD_REQUEST,
           "Tidak bisa update produk yang sudah dihapus");
     }
 
-    // Update fields
     product.setName(payload.name());
-    product.setCogm(payload.cogm()); // Harga bisa berubah di sini, tapi receipt tetep pakai COGS lama
+    product.setCogm(payload.cogm()); // Snapshotted as COGS on Receipt
     product.setStock(payload.stock());
 
     return toResponse(productRepo.save(product));
   }
 
-  /**
-   * SOFT DELETE implementation.
-   *
-   * Kenapa soft delete untuk product?
-   * - Product masih referenced di receipts (historical transactions)
-   * - Kalau hard delete, foreign key constraint error atau data loss
-   * - Dengan soft delete, product tetep ada buat historical data,
-   * tapi gak muncul di product list untuk pembelian baru
-   */
+ // Audit and casdade concern: Selain soft delete, bisa di snapshot juga di receipt
   @Override
   @Transactional(rollbackFor = Exception.class)
   public void delete(UUID id) {
@@ -147,21 +116,16 @@ public class ProductImpl implements ProductServ {
             HttpStatus.NOT_FOUND,
             "Produk dengan ID " + id + " tidak ditemukan"));
 
-    // Kalau udah di-delete sebelumnya, skip
     if (product.getDeletedAt() != null) {
       throw new ResponseStatusException(
           HttpStatus.BAD_REQUEST,
           "Produk sudah dihapus sebelumnya");
     }
 
-    // Set deletedAt = now (SOFT DELETE)
     product.setDeletedAt(LocalDateTime.now());
     productRepo.save(product);
   }
 
-  /**
-   * Helper method convert Entity → Response DTO.
-   */
   private ProductRes toResponse(ProductNtt product) {
     return ProductRes.builder()
         .id(product.getId())

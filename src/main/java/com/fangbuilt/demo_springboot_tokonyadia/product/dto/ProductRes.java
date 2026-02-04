@@ -5,9 +5,6 @@ import java.util.UUID;
 
 import lombok.Builder;
 
-/**
- * Response DTO untuk Product.
- */
 @Builder
 public record ProductRes(
     UUID id,

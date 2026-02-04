@@ -24,17 +24,6 @@ import com.fangbuilt.demo_springboot_tokonyadia.transaction.serv.TransactionServ
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
-/**
- * Controller untuk Transaction endpoints.
- *
- * PENTING: Transaction creation adalah operasi kompleks yang:
- * 1. Validasi stok produk
- * 2. Snapshot harga produk ke COGS
- * 3. Kurangi stok produk
- * 4. Save transaction + receipts
- *
- * Semuanya atomic (all-or-nothing) thanks to @Transactional.
- */
 @RestController
 @RequestMapping("/transactions")
 @RequiredArgsConstructor
@@ -42,23 +31,6 @@ public class TransactionCtrl {
 
   private final TransactionServ transactionServ;
 
-  /**
-   * Create transaction dengan receipts sekaligus.
-   *
-   * Request body example:
-   * {
-   * "customerId": "uuid-here",
-   * "items": [
-   * {"productId": "uuid1", "quantity": 2},
-   * {"productId": "uuid2", "quantity": 1}
-   * ]
-   * }
-   *
-   * Akan otomatis:
-   * - Set COGS dari Product.cogm saat ini
-   * - Kurangi stok produk
-   * - Rollback kalau stok tidak cukup
-   */
   @PostMapping
   public ResponseEntity<TransactionRes> create(@Valid
   @RequestBody
@@ -73,25 +45,6 @@ public class TransactionCtrl {
     return ResponseEntity.ok(transactionServ.read(id));
   }
 
-  /**
-   * Get transactions dengan pagination dan filtering.
-   *
-   * Query params:
-   * - customerId: Filter by customer (exact match)
-   * - customerName: Filter by customer name (partial match)
-   * - startDate, endDate: Filter by date range (ISO 8601 format)
-   * - page, size, sort: Pagination params
-   *
-   * Examples:
-   * 1. Customer history: GET /transactions?customerId=uuid-here&page=0&size=10
-   * 2. Search by name: GET /transactions?customerName=john&sort=createdAt,desc
-   * 3. Date range: GET
-   * /transactions?startDate=2026-01-01T00:00:00&endDate=2026-01-31T23:59:59
-   * 4. Combine: GET /transactions?customerName=john&startDate=2026-01-01T00:00:00
-   *
-   * Date format: yyyy-MM-dd'T'HH:mm:ss (ISO 8601)
-   * Example: 2026-01-15T14:30:00
-   */
   @GetMapping
   public ResponseEntity<Page<TransactionRes>> read(
       @RequestParam(required = false)
@@ -109,15 +62,6 @@ public class TransactionCtrl {
         transactionServ.read(customerId, customerName, startDate, endDate, pageable));
   }
 
-  /**
-   * Delete transaction - HARD DELETE.
-   *
-   * PERHATIAN: Di production, endpoint ini sebaiknya di-disable atau
-   * di-restrict ke admin only. Financial records seharusnya permanent.
-   *
-   * Kalau butuh "cancel transaction", lebih baik buat refund transaction baru
-   * daripada delete yang existing.
-   */
   @DeleteMapping("/{id}")
   public ResponseEntity<Void> delete(@PathVariable
   UUID id) {
