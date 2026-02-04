@@ -2,6 +2,11 @@ package com.fangbuilt.demo_springboot_tokonyadia.member;
 
 import org.springframework.data.jpa.domain.Specification;
 
+import com.fangbuilt.demo_springboot_tokonyadia.customer.CustomerNtt;
+
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+
 /**
  * Specification buat filtering Member.
  * Useful buat admin dashboard atau user management.
@@ -27,7 +32,12 @@ public class MemberSpec {
    * Berguna buat distinguish antara "account only" vs "full profile"
    */
   public static Specification<MemberNtt> hasCustomerProfile() {
-    return (root, query, cb) -> cb.isNotNull(root.get("customer"));
+    return (root, query, cb) -> {
+      Join<MemberNtt, CustomerNtt> customerJoin = root.join("customer", JoinType.INNER);
+      return cb.and(
+          cb.isNotNull(customerJoin),
+          cb.isNull(customerJoin.get("deletedAt")));
+    };
   }
 
   /**
@@ -35,7 +45,12 @@ public class MemberSpec {
    * Berguna buat "incomplete registration" tracking.
    */
   public static Specification<MemberNtt> hasNoCustomerProfile() {
-    return (root, query, cb) -> cb.isNull(root.get("customer"));
+    return (root, query, cb) -> {
+      Join<MemberNtt, CustomerNtt> customerJoin = root.join("customer", JoinType.LEFT);
+      return cb.or(
+          cb.isNull(customerJoin),
+          cb.isNotNull(customerJoin.get("deletedAt")));
+    };
   }
 
   /**

@@ -1,0 +1,153 @@
+@BASE_URL = http://localhost:8080
+@PRODUCT_ID_1 = d6c80355-dd8c-44a5-86ff-7fbe73af1536
+@PRODUCT_ID_2 = d9a04add-6858-4be0-810b-527332e78d3e
+@PRODUCT_ID_3 = fd344ee8-d0ef-4aa4-aa09-75a5af2efa68
+@PRODUCT_ID_4 = f2e5a027-819d-443e-af6c-f1290c653903
+@PRODUCT_ID_5 = fd3b73a1-ac7c-477b-a525-5503d1890705
+@PRODUCT_ID_6 = 01c20234-cbdc-48a3-afc3-62d852a1b2e2
+@PRODUCT_ID_7 = ed96ba94-a438-4e97-a4cb-6f0acfc3936d
+@PRODUCT_ID_8 = 0beb4856-cb12-4f16-a57c-8a2791a6bbcc
+@PRODUCT_ID_9 = eb5190ec-deab-4be3-ba3e-cfc82237f326
+@PRODUCT_ID_10 = 1aa669a1-7003-48a4-aade-5d21db4eedde
+@PRODUCT_ID_11 = 1f0a229e-59d5-4587-8100-730a479153cc
+@PRODUCT_ID_12 = e843beb4-1eba-43de-b229-04765fed6dbc
+@PRODUCT_ID_13 = d32204c8-17e4-4e8b-8f6d-e2acb1128c59
+@PRODUCT_ID_14 = e09506be-1acd-49cc-a70c-1eb2f27bddcc
+@PRODUCT_ID_15 = 3acadffe-8c34-4f40-8e3f-e500e1d60afa
+@PRODUCT_ID_16 = 71448086-5a8c-47fb-b67d-5d8ea4e6d3f0
+@PRODUCT_ID_17 = 029dd6b7-56fd-4c2c-bb28-65fea35525fd
+@CUSTOMER_ID_1 = af095866-d9e4-4e67-979e-a12242f2094b
+@CUSTOMER_ID_2 = 9a6de331-4d38-4581-9675-1b0a0c2b0a87
+@CUSTOMER_ID_3 = aea9d3ab-5c7e-469d-9f95-ad7c3fc0d812
+@CUSTOMER_ID_4 = ca16dc3b-f878-4c48-8459-1ab3870a976a
+@CUSTOMER_ID_5 = 06e7c557-59dd-48a1-8a60-3de93dc96ba0
+@TRANSACTION_ID = 8842586e-2969-4b6d-b06a-738bb10447ee
+
+### Transaction 1 - John's Gaming Setup Purchase
+POST {{BASE_URL}}/transactions
+Content-Type: application/json
+
+{
+  "customerId": "{{CUSTOMER_ID_1}}",
+  "items": [
+    {
+      "productId": "{{PRODUCT_ID_1}}",
+      "quantity": 1
+    },
+    {
+      "productId": "{{PRODUCT_ID_5}}",
+      "quantity": 1
+    },
+    {
+      "productId": "{{PRODUCT_ID_4}}",
+      "quantity": 1
+    }
+  ]
+}
+
+### Transaction 2 - Jane's Home Office Setup
+POST {{BASE_URL}}/transactions
+Content-Type: application/json
+
+{
+  "customerId": "{{CUSTOMER_ID_2}}",
+  "items": [
+    {
+      "productId": "{{PRODUCT_ID_2}}",
+      "quantity": 1
+    },
+    {
+      "productId": "{{PRODUCT_ID_7}}",
+      "quantity": 1
+    },
+    {
+      "productId": "{{PRODUCT_ID_15}}",
+      "quantity": 1
+    },
+    {
+      "productId": "{{PRODUCT_ID_11}}",
+      "quantity": 1
+    }
+  ]
+}
+
+### Transaction 3 - Ahmad's Budget Setup
+POST {{BASE_URL}}/transactions
+Content-Type: application/json
+
+{
+  "customerId": "{{CUSTOMER_ID_3}}",
+  "items": [
+    {
+      "productId": "{{PRODUCT_ID_3}}",
+      "quantity": 1
+    },
+    {
+      "productId": "{{PRODUCT_ID_8}}",
+      "quantity": 1
+    },
+    {
+      "productId": "{{PRODUCT_ID_10}}",
+      "quantity": 1
+    },
+    {
+      "productId": "{{PRODUCT_ID_14}}",
+      "quantity": 2
+    }
+  ]
+}
+
+### Transaction 4 - Sarah's Accessories Purchase
+POST {{BASE_URL}}/transactions
+Content-Type: application/json
+
+{
+  "customerId": "{{CUSTOMER_ID_4}}",
+  "items": [
+    {
+      "productId": "{{PRODUCT_ID_6}}",
+      "quantity": 2
+    },
+    {
+      "productId": "{{PRODUCT_ID_12}}",
+      "quantity": 3
+    },
+    {
+      "productId": "{{PRODUCT_ID_13}}",
+      "quantity": 1
+    }
+  ]
+}
+
+### Transaction 5 - Budi's Premium Audio Purchase
+POST {{BASE_URL}}/transactions
+Content-Type: application/json
+
+{
+  "customerId": "{{CUSTOMER_ID_5}}",
+  "items": [
+    {
+      "productId": "{{PRODUCT_ID_9}}",
+      "quantity": 1
+    }
+  ]
+}
+
+### Get a Transaction by ID
+GET {{BASE_URL}}/transactions/{{TRANSACTION_ID}}
+
+### List Transactions
+GET {{BASE_URL}}/transactions?page=1&size=10&sort=createdAt,desc
+
+### Filter Transactions by Customer ID
+GET {{BASE_URL}}/transactions?customerId={{CUSTOMER_ID_1}}
+
+### Search Transactions by Customer Name
+GET {{BASE_URL}}/transactions?customerName=jane
+
+### Filter Transactions by Date Range
+GET {{BASE_URL}}/transactions?startDate=2026-02-01T00:00:00&endDate=2026-02-04T20:59:59
+
+### DANGER ZONE
+### Hard Delete a Transaction
+# DELETE {{BASE_URL}}/transactions/{{{{TRANSACTION_ID}}}}

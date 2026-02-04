@@ -96,8 +96,12 @@ public class ProductImpl implements ProductServ {
     if (minStock != null || maxStock != null) {
       spec = spec.and(ProductSpec.hasStockRange(minStock, maxStock));
     }
-    if (available != null && available) {
-      spec = spec.and(ProductSpec.isAvailable());
+    if (available != null) {
+      if (available) {
+        spec = spec.and(ProductSpec.isAvailable());
+      } else {
+        spec = spec.and(ProductSpec.isOutOfStock());
+      }
     }
 
     return productRepo.findAll(spec, pageable).map(this::toResponse);

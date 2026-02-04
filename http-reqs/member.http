@@ -1,0 +1,83 @@
+@BASE_URL = http://localhost:8080
+@MEMBER_ID = 56045911-8aff-4208-97d8-7790e6b9fdee
+
+@SOFT_DELETE_TEST_MEMBER_ID = 51c4db1f-8925-4640-a2d2-7c3c6fd10e98
+# That member with that ID was soft deleted
+
+POST {{BASE_URL}}/members HTTP/1.1
+Content-Type: application/json
+
+{
+  "username": "johndoe",
+  "password": "password123"
+}
+
+### Create Members
+POST {{BASE_URL}}/members
+Content-Type: application/json
+
+{
+  "username": "janesmith",
+  "password": "secure456"
+}
+
+###
+POST {{BASE_URL}}/members
+Content-Type: application/json
+
+{
+  "username": "ahmadbudiman",
+  "password": "jakarta2024"
+}
+
+###
+POST {{BASE_URL}}/members
+Content-Type: application/json
+
+{
+  "username": "sarahconnor",
+  "password": "terminator99"
+}
+
+###
+POST {{BASE_URL}}/members
+Content-Type: application/json
+
+{
+  "username": "budisantoso",
+  "password": "bandung123"
+}
+
+###
+POST {{BASE_URL}}/members
+Content-Type: application/json
+
+{
+  "username": "clarasono",
+  "password": "balikpapan2023"
+}
+
+### Get a Member by ID
+GET {{BASE_URL}}/members/{{MEMBER_ID}}
+
+### List Members
+GET {{BASE_URL}}/members?page=1&size=10&sort=createdAt,asc
+
+### Search Members by Username
+GET {{BASE_URL}}/members?username=j
+
+### Filter Members with Customer
+GET {{BASE_URL}}/members?hasCustomerProfile=true
+### Clara Sono
+
+### Update a Member
+PUT {{BASE_URL}}/members/{{MEMBER_ID}}
+Content-Type: application/json
+
+{
+  "username": "budisanjaya",
+  "password": "newpassword123"
+}
+
+### Soft Delete a Member
+DELETE {{BASE_URL}}/members/{{SOFT_DELETE_TEST_MEMBER_ID}}

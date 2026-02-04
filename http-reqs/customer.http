@@ -1,0 +1,113 @@
+@BASE_URL = http://localhost:8080
+@MEMBER_ID_1 = 5b8ef0ae-020f-4333-b264-56cf88f64c4f
+@MEMBER_ID_2 = 56045911-8aff-4208-97d8-7790e6b9fdee
+@MEMBER_ID_3 = 8515edb0-90d7-46f8-9fbd-9698d5660332
+@MEMBER_ID_4 = b565dbe4-67c9-4f83-8b52-0a9219fd3823
+@MEMBER_ID_5 = 7edcbf47-a655-4180-9fb5-e22e16f4a7db
+@MEMBER_ID_6 = 4f2944bf-8d57-4036-87e1-3280a7c43eba
+@CUSTOMER_ID = af095866-d9e4-4e67-979e-a12242f2094b
+@SOFT_DELETE_TEST_CUSTOMER_ID = 30631ef4-5fd3-4350-8564-43a4feaa4833
+
+POST {{BASE_URL}}/customers HTTP/1.1
+Content-Type: application/json
+
+{
+  "fullname": "John Doe",
+  "email": "john.doe@email.com",
+  "address": "Jl. Sudirman No. 123, Jakarta Pusat, DKI Jakarta",
+  "gender": "MALE",
+  "memberId": "{{MEMBER_ID_1}}"
+}
+
+### Create Customers
+POST {{BASE_URL}}/customers
+Content-Type: application/json
+
+{
+  "fullname": "Jane Smith",
+  "email": "jane.smith@email.com",
+  "address": "Jl. Thamrin No. 45, Jakarta Pusat, DKI Jakarta",
+  "gender": "FEMALE",
+  "memberId": "{{MEMBER_ID_2}}"
+}
+
+###
+POST {{BASE_URL}}/customers
+Content-Type: application/json
+
+{
+  "fullname": "Ahmad Budiman",
+  "email": "ahmad.budiman@email.com",
+  "address": "Jl. Gatot Subroto No. 789, Jakarta Selatan, DKI Jakarta",
+  "gender": "MALE",
+  "memberId": "{{MEMBER_ID_3}}"
+}
+
+###
+POST {{BASE_URL}}/customers
+Content-Type: application/json
+
+{
+  "fullname": "Sarah Connor",
+  "email": "sarah.connor@email.com",
+  "address": "Jl. Asia Afrika No. 56, Bandung, Jawa Barat",
+  "gender": "FEMALE",
+  "memberId": "{{MEMBER_ID_4}}"
+}
+
+###
+POST {{BASE_URL}}/customers
+Content-Type: application/json
+
+{
+  "fullname": "Budi Santoso",
+  "email": "budi.santoso@email.com",
+  "address": "Jl. Dago No. 234, Bandung, Jawa Barat",
+  "gender": "MALE",
+  "memberId": "{{MEMBER_ID_5}}"
+}
+
+###
+POST {{BASE_URL}}/customers
+Content-Type: application/json
+
+{
+  "fullname": "Clara Sono",
+  "email": "ilsognoclara@email.com",
+  "address": "Jl. Sepinggan No. 456, Balikpapan, Kalimantan Timur",
+  "gender": "FEMALE",
+  "memberId": "{{MEMBER_ID_6}}"
+}
+
+### Get a Customer by ID
+GET {{BASE_URL}}/customers/{{CUSTOMER_ID}}
+
+### List Customers
+GET {{BASE_URL}}/customers?page=1&size=10&sort=fullname,asc
+
+### Search Customers by Name
+GET {{BASE_URL}}/customers?fullname=john
+
+### Search Customers by Email
+GET {{BASE_URL}}/customers?email=jane
+
+### Search Customers by Address
+GET {{BASE_URL}}/customers?address=jakarta
+
+### Search Customers by Gender
+GET {{BASE_URL}}/customers?gender=FEMALE
+
+### Update a Customer
+PUT {{BASE_URL}}/customers/{{CUSTOMER_ID}}
+Content-Type: application/json
+
+{
+  "fullname": "John Doe Updated",
+  "email": "john.doe.updated@email.com",
+  "address": "New Address, Jakarta",
+  "gender": "MALE",
+  "memberId": "{{MEMBER_ID_1}}"
+}
+
+### Soft Delete a Customer
+DELETE {{BASE_URL}}/customers/{{SOFT_DELETE_TEST_CUSTOMER_ID}}

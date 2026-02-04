@@ -1,0 +1,205 @@
+@BASE_URL = http://localhost:8080
+@PRODUCT_ID = fd344ee8-d0ef-4aa4-aa09-75a5af2efa68
+@UPDATE_TEST_PRODUCT_ID = d6c80355-dd8c-44a5-86ff-7fbe73af1536
+@SOFT_DELETE_TEST_PRODUCT_ID = b06fc5fa-0586-463b-91b4-dcbc9e3522f5
+
+POST {{BASE_URL}}/products
+Content-Type: application/json
+
+{
+  "name": "ROG Zephyrus G14 Gaming Laptop",
+  "cogm": 25000000.00,
+  "stock": 15
+}
+
+### Create Products
+POST {{BASE_URL}}/products
+Content-Type: application/json
+
+{
+  "name": "ThinkPad X1 Carbon Business Laptop",
+  "cogm": 18000000,
+  "stock": 20
+}
+
+###
+POST {{BASE_URL}}/products
+Content-Type: application/json
+
+{
+  "name": "Acer Aspire 5 Budget Laptop",
+  "cogm": 7500000,
+  "stock": 35
+}
+
+###
+POST {{BASE_URL}}/products
+Content-Type: application/json
+
+{
+  "name": "Keychron K2 Mechanical Keyboard",
+  "cogm": 1200000,
+  "stock": 50
+}
+
+###
+POST {{BASE_URL}}/products
+Content-Type: application/json
+
+{
+  "name": "Logitech G502 Hero Gaming Mouse",
+  "cogm": 650000,
+  "stock": 75
+}
+
+###
+POST {{BASE_URL}}/products
+Content-Type: application/json
+
+{
+  "name": "Logitech MX Master 3 Wireless Mouse",
+  "cogm": 1350000,
+  "stock": 40
+}
+
+###
+POST {{BASE_URL}}/products
+Content-Type: application/json
+
+{
+  "name": "LG 34WN80C-B 34-inch Ultrawide Monitor",
+  "cogm": 6500000,
+  "stock": 12
+}
+
+###
+POST {{BASE_URL}}/products
+Content-Type: application/json
+
+{
+  "name": "Samsung 24-inch Full HD Monitor",
+  "cogm": 1800000,
+  "stock": 30
+}
+
+###
+POST {{BASE_URL}}/products
+Content-Type: application/json
+
+{
+  "name": "Sony WH-1000XM5 Noise Cancelling Headphones",
+  "cogm": 4500000,
+  "stock": 25
+}
+
+###
+POST {{BASE_URL}}/products
+Content-Type: application/json
+
+{
+  "name": "Audio-Technica ATH-M20x Headphones",
+  "cogm": 750000,
+  "stock": 60
+}
+
+###
+POST {{BASE_URL}}/products
+Content-Type: application/json
+
+{
+  "name": "Logitech C920 Pro HD Webcam",
+  "cogm": 1100000,
+  "stock": 45
+}
+
+###
+POST {{BASE_URL}}/products
+Content-Type: application/json
+
+{
+  "name": "Anker 7-in-1 USB-C Hub",
+  "cogm": 550000,
+  "stock": 80
+}
+
+###
+POST {{BASE_URL}}/products
+Content-Type: application/json
+
+{
+  "name": "Samsung T7 Portable SSD 1TB",
+  "cogm": 2200000,
+  "stock": 55
+}
+
+###
+POST {{BASE_URL}}/products
+Content-Type: application/json
+
+{
+  "name": "Xiaomi Mi Smart LED Desk Lamp",
+  "cogm": 350000,
+  "stock": 70
+}
+
+###
+POST {{BASE_URL}}/products
+Content-Type: application/json
+
+{
+  "name": "Herman Miller Aeron Ergonomic Chair",
+  "cogm": 15000000,
+  "stock": 8
+}
+
+###
+POST {{BASE_URL}}/products
+Content-Type: application/json
+
+{
+  "name": "Limited Edition Mechanical Keycaps",
+  "cogm": 850000,
+  "stock": 3
+}
+
+###
+POST {{BASE_URL}}/products
+Content-Type: application/json
+
+{
+  "name": "Sold Out Graphics Card",
+  "cogm": 12000000,
+  "stock": 0
+}
+
+### Get a Product by ID
+GET {{BASE_URL}}/products/{{PRODUCT_ID}}
+
+### List Products
+GET {{BASE_URL}}/products?page=2&size=10&sort=createdAt,desc
+
+### Search Products by Name
+GET {{BASE_URL}}/products?name=laptop&page=1&size=10
+
+### Search Products by Price Range
+GET {{BASE_URL}}/products?minPrice=1000000&maxPrice=5000000&sort=cogm,asc
+
+### Search Products by Stock Range
+GET {{BASE_URL}}/products?minStock=20&maxStock=50&sort=stock,desc
+
+### Filter Products by Stock
+GET {{BASE_URL}}/products?available=true
+### Chane to false for out of Stock Products
+
+### Update a Product
+PUT http://localhost:8080/products/{{UPDATE_TEST_PRODUCT_ID}}
+Content-Type: application/json
+
+{
+  "name": "ROG Zephyrus G14 Gaming Laptop",
+  "cogm": 27000000,
+  "stock": 15
+}
+
+### Soft Delete a Product
+DELETE {{BASE_URL}}/products/{{SOFT_DELETE_TEST_PRODUCT_ID}}

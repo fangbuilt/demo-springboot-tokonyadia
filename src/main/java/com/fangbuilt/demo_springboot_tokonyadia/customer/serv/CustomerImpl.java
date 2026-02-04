@@ -166,6 +166,8 @@ public class CustomerImpl implements CustomerServ {
         .address(customer.getAddress())
         .gender(customer.getGender())
         .memberId(customer.getMember() != null ? customer.getMember().getId() : null)
+        .createdAt(customer.getCreatedAt())
+        .updatedAt(customer.getUpdatedAt())
         .build();
   }
 }
