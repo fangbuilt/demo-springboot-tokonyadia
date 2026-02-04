@@ -1,4 +1,7 @@
 @BASE_URL = http://localhost:8080
+@ACCESS_TOKEN = eyJhbGciOiJIUzI1NiJ9.eyJyb2xlIjoiVVNFUiIsInN1YiI6Im5ld2F1dGh1c2VyIiwiaWF0IjoxNzcwMjQ3NTI2LCJleHAiOjE3NzAzMzM5MjZ9.KBXWYlazyCf04rdmfGuHUCSDaLqcF1vvLtIC785o00Y
+@REFRESH_TOKEN = d5d99b51-8655-4d29-a1f0-c41d5284d92a
+
 POST {{BASE_URL}}/auth/login
 Content-Type: application/json
 
@@ -9,3 +12,16 @@ Content-Type: application/json
 
 ###
 POST {{BASE_URL}}/auth/logout
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+###
+GET {{BASE_URL}}/auth/me
+Authorization: Bearer {{ACCESS_TOKEN}}
+
+###
+POST {{BASE_URL}}/auth/refresh
+Content-Type: application/json
+
+{
+  "refreshToken": "{{REFRESH_TOKEN}}"
+}
