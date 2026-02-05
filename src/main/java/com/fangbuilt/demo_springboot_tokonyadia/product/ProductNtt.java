@@ -12,10 +12,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.SuperBuilder;
 
 // TODO: COGM = Harga pokok produksi sebelum ambil untung, COGS = Sesudahnya
 // Selling price yg dikalikan quantity dan di sum misalnya ada diskon
@@ -26,7 +26,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
+@SuperBuilder
 public class ProductNtt extends BaseNtt {
 
   @Column(nullable = false, length = 200)
