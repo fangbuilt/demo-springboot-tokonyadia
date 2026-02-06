@@ -13,5 +13,6 @@ public class JpaConfig {
   @Bean
   public AuditorAware<String> auditorAware() {
     return () -> Optional.of("SYSTEM");
-  }
+  } // AuditorAware ini biar kita bisa lihat "siapa" juga,
+    // Bukan "kapan" doang
 }

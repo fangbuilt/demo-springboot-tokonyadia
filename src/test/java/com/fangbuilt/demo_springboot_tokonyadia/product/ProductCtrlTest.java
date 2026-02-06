@@ -13,6 +13,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 
+import com.fangbuilt.demo_springboot_tokonyadia.auth.JwtUtil;
 import com.fangbuilt.demo_springboot_tokonyadia.product.dto.ProductReq;
 import com.fangbuilt.demo_springboot_tokonyadia.product.dto.ProductRes;
 import com.fangbuilt.demo_springboot_tokonyadia.product.serv.ProductServ;
@@ -28,6 +29,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class ProductCtrlTest {
   @MockitoBean
   private ProductServ productServ;
+
+  @MockitoBean
+  private JwtUtil jwtUtil;
 
   @Autowired
   private MockMvc mockMvc;

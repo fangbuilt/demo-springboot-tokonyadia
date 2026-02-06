@@ -32,7 +32,7 @@ public class ProductCtrl {
   private final ProductServ productServ;
 
   @PostMapping
-  @PreAuthorize("hasRole(ADMIN)") // buat test aja, user biasa boleh kok
+  @PreAuthorize("hasRole(USERl)") // buat test aja, user biasa boleh kok
   public ResponseEntity<ProductRes> create(@Valid
   @RequestBody
   ProductReq payload) {
